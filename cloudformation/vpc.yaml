@@ -8,27 +8,31 @@ Parameters:
   VpcCIDR:
     Description: Please enter the IP range (CIDR notation) for this VPC
     Type: String
-    Default: 10.1.0.0/16
+    Default: 10.3.0.0/16
 
   PublicSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the public subnet in the first Availability Zone
     Type: String
-    Default: 10.1.10.0/24
+    Default: 10.3.10.0/24
 
   PublicSubnet2CIDR:
     Description: Please enter the IP range (CIDR notation) for the public subnet in the second Availability Zone
     Type: String
-    Default: 10.1.11.0/24
+    Default: 10.3.11.0/24
 
   PrivateSubnet1CIDR:
     Description: Please enter the IP range (CIDR notation) for the private subnet in the first Availability Zone
     Type: String
-    Default: 10.1.20.0/24
+    Default: 10.3.20.0/24
 
   PrivateSubnet2CIDR:
     Description: Please enter the IP range (CIDR notation) for the private subnet in the second Availability Zone
     Type: String
-    Default: 10.1.21.0/24
+    Default: 10.3.21.0/24
+
+  DBPassword:
+    Description: Please enter db master psw
+    Type: String    
 
 Metadata:
   AWS::CloudFormation::Interface:
@@ -203,6 +207,34 @@ Resources:
         - Key: Name
           Value: UDARR-Application
 
+  RDSSubnetGroup:
+    DependsOn: DatabaseSecurityGroup
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: RDS Subnet group - include private subnets
+      DBSubnetGroupName: rds-subnet-group
+      SubnetIds: 
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
+  RDS:
+    Type: AWS::RDS::DBInstance
+    DependsOn:
+      - DatabaseSecurityGroup
+    Properties:
+      AllocatedStorage: 20
+      DBInstanceIdentifier: udacity-course-db-instance-1
+      DBInstanceClass: db.t3.micro
+      DBName: udacity
+      MasterUserPassword: !Ref DBPassword
+      VPCSecurityGroups:
+        - !Ref DatabaseSecurityGroup
+      DBSubnetGroupName: !Ref RDSSubnetGroup
+      Engine: mysql
+      MasterUsername: admin
+      MultiAZ: true
+      Port: 3306
+
 Outputs:
   VPC:
     Description: VPC ID
@@ -223,3 +255,12 @@ Outputs:
   ApplicationSecurityGroup:
     Description: ID of the EC2 instance security group
     Value: !Ref ApplicationSecurityGroup
+
+  RDSSubnetGroup:
+    Description: Id of the RDS subnet group
+    Value: !Ref RDSSubnetGroup
+
+  RDS:
+    Description: Id of the db instance
+    Value: !Ref RDS 
+

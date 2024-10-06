@@ -1,0 +1,47 @@
+,     #_
+~\_  ####_        Amazon Linux 2023
+~~  \_#####\
+~~     \###|
+~~       \#/ ___   https://aws.amazon.com/linux/amazon-linux-2023
+~~       V~' '->
+ ~~~         /
+   ~~._.   _/
+      _/ _/
+    _/m/'
+Last login: Sun Oct  6 13:41:58 2024 from 18.237.140.165
+[ec2-user@ip-10-2-10-250 ~]$ mysql -h standby-db-1.c96ywsu0qz0j.us-west-2.rds.amazonaws.com -P 3306 -u admin -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 8.0.35 Source distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MySQL [(none)]> use udacity;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MySQL [udacity]> SELECT * FROM students;
++----+----------+------+
+| id | name     | age  |
++----+----------+------+
+|  1 | John Doe |   25 |
++----+----------+------+
+1 row in set (0.001 sec)
+
+MySQL [udacity]> INSERT INTO students (name, age) VALUES ('Jane Smith', 22);
+Query OK, 1 row affected (0.014 sec)
+
+MySQL [udacity]> SELECT * FROM students;
++----+------------+------+
+| id | name       | age  |
++----+------------+------+
+|  1 | John Doe   |   25 |
+|  2 | Jane Smith |   22 |
++----+------------+------+
+2 rows in set (0.001 sec)
+
+MySQL [udacity]> 
