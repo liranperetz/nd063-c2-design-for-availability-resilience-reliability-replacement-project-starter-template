@@ -1,13 +1,10 @@
 Availability Estimate:
 The recovery process should be really fast since we have configured our RDS as
-multi AZ which means that we have a fast failover in case of single AZ failure,
-and additionally we also created a read replica in another region (in case
-of more than single AZ outage).
-
-About the RPO, my assumption is that the app is running all the time.
-
+multi AZ which means that we have a fast failover in case of single AZ failure. 
+Additionally we also created a read replica in another region for DR with daily backup.
 
 Minimum RTO for a single AZ outage -> 1.5 hours (human factor, fixing the issue)
-Minimum RTO for a single region outage -> 2 hours
 Minimum RPO for a single AZ outage -> 1.5 hours
-Minimum RPO for a single region outage -> 2 hours
+
+Minimum RTO for a region outage -> 2 hours
+Minimum RPO for a region outage -> 1 day
